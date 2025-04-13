@@ -1,7 +1,19 @@
 package com.test.redis;
+import com.test.ratelimit.configuration.Configuration;
+import com.test.ratelimit.configuration.ConfigurationRefresher;
+import com.test.util.JsonUtil;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.params.ScanParams;
+import redis.clients.jedis.resps.ScanResult;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static com.test.ratelimit.configuration.ConfigurationUtil.buildConfigurationFromJson;
 
 public class RedisUtil {
 
@@ -43,4 +55,39 @@ public class RedisUtil {
             return jedis.exists(key);
         }
     }
+
+    public static JSONArray getJson(String prefix) throws Exception{
+        String cursor = ScanParams.SCAN_POINTER_START;
+        ScanParams scanParams = new ScanParams().match(prefix+"*").count(100);
+        JSONArray array = new JSONArray();
+        try(Jedis jedis = RedisConnection.getInstance().getJedis()){
+
+            do {
+                ScanResult<String> scanResult = jedis.scan(cursor, scanParams);
+                for (String key : scanResult.getResult()) {
+                    String jsonValue = RedisUtil.getValue(key);
+                    JSONObject jsonObject = JsonUtil.safeParse(jsonValue);
+                    jsonObject.put("key",key);
+                    array.put(jsonObject);
+
+                }
+                cursor = scanResult.getCursor();
+            } while (!cursor.equals(ScanParams.SCAN_POINTER_START));
+        }
+        return array;
+    }
+
+    public static boolean ping(){
+        try (Jedis jedis = RedisConnection.getInstance().getJedis()) {
+             jedis.ping();
+             return true;
+        }catch (Exception e){
+            return false;
+        }
+
+    }
+
+
+
+
 }

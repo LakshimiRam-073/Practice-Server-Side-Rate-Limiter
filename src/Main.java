@@ -28,7 +28,7 @@ public class Main {
     }
 
     private static void testParseConfiguration() throws Exception {
-        List<Configuration> configurationList = ConfigXMLParser.getConfiguration();
+        List<Configuration> configurationList = ConfigXMLParser.getConfigurationFromXML();
         for (Configuration conf : configurationList){
             System.out.println("-----------------------------------------");
             System.out.println(conf);

@@ -2,16 +2,15 @@ package com.test.server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpsServer;
 
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.net.URI;
 import java.util.*;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.test.ratelimit.configuration.ConfigurationRefresher;
 import org.json.JSONObject;
+
+import static com.test.util.JsonUtil.convertMapToJSON;
 
 
 public class TestHttpServer {
@@ -31,6 +30,7 @@ public class TestHttpServer {
         if (Objects.isNull(port)){
             port = DEFAULT_PORT;
         }
+        ConfigurationRefresher.start();
 
         HttpServer testServer = HttpServer.create(new InetSocketAddress(port),0);
 
@@ -56,75 +56,5 @@ public class TestHttpServer {
     }
 
 
-    public static JSONObject convertMapToJSON(Map<String, Object> map) throws Exception {
-        if (map == null) {
-            return null;
-        }
-        JSONObject obj = new JSONObject();
-        Iterator iter = map.keySet().iterator();
-        while (iter.hasNext()) {
 
-            String key = (String) iter.next();
-            Object value = map.get(key);
-
-            if (value instanceof List) {
-                value = convertListToJSONArray((List) value);
-            } else if (value instanceof Map) {
-                value = convertMapToJSON((Map) value);
-            }
-            obj.put(key, value);
-        }
-        return obj;
-    }
-
-    public static Map<String, Object> convertJSONToMap(JSONObject obj) throws Exception {
-
-        if (obj == null) {
-            return null;
-        }
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        Iterator<String> iter = obj.keys();
-
-        while (iter.hasNext()) {
-            String key = iter.next();
-            Object value = obj.get(key);
-            if (value instanceof JSONArray) {
-                value = convertJSONArrayToList((JSONArray) value);
-            } else if (value instanceof JSONObject) {
-                value = convertJSONToMap((JSONObject) value);
-            }
-            map.put(key, value);
-        }
-        return map;
-    }
-
-    public static List<Object> convertJSONArrayToList(JSONArray array) throws Exception {
-        List<Object> list = new ArrayList<Object>();
-        for (int i = 0; i < array.length(); i++) {
-            Object value = array.get(i);
-            if (value instanceof JSONArray) {
-                value = convertJSONArrayToList((JSONArray) value);
-            }
-
-            else if (value instanceof JSONObject) {
-                value = convertJSONToMap((JSONObject) value);
-            }
-            list.add(value);
-        }
-        return list;
-    }
-
-    public static <T> JSONArray convertListToJSONArray(Collection<T> list) throws Exception {
-        JSONArray arr = new JSONArray();
-        for (Object value : list) {
-            if (value instanceof List) {
-                value = convertListToJSONArray((List) value);
-            } else if (value instanceof Map) {
-                value = convertMapToJSON((Map) value);
-            }
-            arr.put(value);
-        }
-        return arr;
-    }
 }
