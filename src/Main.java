@@ -1,7 +1,10 @@
+import com.test.ratelimit.configuration.ConfigXMLParser;
+import com.test.ratelimit.configuration.Configuration;
 import com.test.redis.RedisUtil;
 import com.test.server.TestHttpServer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -10,6 +13,8 @@ public class Main {
 
 //        testServer();
 //        testRedis();
+//        testParseConfiguration();
+
 
     }
 
@@ -20,6 +25,15 @@ public class Main {
         RedisUtil.deleteKey("Harish");
         System.out.println(RedisUtil.getValue("Harish"));
         System.out.println(RedisUtil.exists("Harish"));
+    }
+
+    private static void testParseConfiguration() throws Exception {
+        List<Configuration> configurationList = ConfigXMLParser.getConfiguration();
+        for (Configuration conf : configurationList){
+            System.out.println("-----------------------------------------");
+            System.out.println(conf);
+            System.out.println("-----------------------------------------\n");
+        }
     }
 
     private static void testServer() throws Exception {
