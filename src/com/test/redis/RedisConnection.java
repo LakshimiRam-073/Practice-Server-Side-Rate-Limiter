@@ -12,6 +12,15 @@ public class RedisConnection {
     private static final Integer DEFAULT_PORT=6379;
 
 
+    public static class RedisConnectionException extends  Exception{
+
+        public RedisConnectionException(String message) {
+            super(message);
+        }
+
+
+    }
+
     protected RedisConnection(String host,Integer port){
         this.jedisPool= new JedisPool(host,port);
     }

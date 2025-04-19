@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.util.*;
 
 import com.test.ratelimit.configuration.ConfigurationRefresher;
+import com.test.redis.RedisConnection;
 import org.json.JSONObject;
 
 import static com.test.util.JsonUtil.convertMapToJSON;

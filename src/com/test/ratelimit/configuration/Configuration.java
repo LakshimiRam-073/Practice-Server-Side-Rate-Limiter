@@ -9,11 +9,33 @@ public class Configuration {
     public static final Integer DEFAULT_TTL = 90;
     public static final Integer DEFAULT_WINDOW = 1;
     public static final Integer DEFAULT_BURST = -1;
+    public static final Algoirthm DEFAULT_ALGO = Algoirthm.LEAKY_BUCKET;
+    public enum Algoirthm {
+        LEAKY_BUCKET("leaky_bucket"),TOKEN_BUCKET("token_bucket"),FIXED_WINDOW("fixed_window"),SLIDING_WINDOW("sliding_window"),MOVING_WINDOW_EXPIRATION("moving_window_expiration");
 
+
+        private final String algorithm;
+        Algoirthm(String algorithm) {
+            this.algorithm=algorithm;
+        }
+        public String getAlgorithm(){
+            return this.algorithm;
+        }
+        public static Algoirthm getAlgorithm(String algorithm){
+            for (Algoirthm algo : Algoirthm.values()){
+                if (algo.getAlgorithm().equals(algorithm)){
+                    return algo;
+                }
+            }
+            return null;
+        }
+
+
+    }
 
     public enum RLConfig{
         URI("uri"),LIMIT("limit"),LIMIT_UNIT("limitunit"),BURST("burst"),TTL("TTL"),TTL_UNIT("TTLunit"),
-        PENALTY_TIME("penaltytime"),PENALTY_TIME_UNIT("penaltytimeunit"),WINDOW("interval"),WINDOW_UNIT("intervalunit");
+        PENALTY_TIME("penaltytime"),PENALTY_TIME_UNIT("penaltytimeunit"),WINDOW("interval"),WINDOW_UNIT("intervalunit"),ALGORITHM("algorithm");
         private final String config;
 
         RLConfig(String config) {
@@ -35,6 +57,15 @@ public class Configuration {
     TimeUnit ttlUnit;
     Integer penalty;
     TimeUnit penaltyUnit;
+    Algoirthm algoirthm;
+
+    public Algoirthm getAlgoirthm() {
+        return algoirthm;
+    }
+
+    public void setAlgoirthm(Algoirthm algoirthm) {
+        this.algoirthm = algoirthm;
+    }
 
     public Configuration(String uri, Integer limit, Integer burst, Integer window) {
         this.uri = uri;

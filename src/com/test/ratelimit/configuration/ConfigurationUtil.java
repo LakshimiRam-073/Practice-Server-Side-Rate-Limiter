@@ -55,8 +55,15 @@ public class ConfigurationUtil {
         parseOptionalTimeUnit(nodeElement, Configuration.RLConfig.WINDOW_UNIT,Configuration.DEFAULT_TIME_UNIT).ifPresent(conf::setWindowUnit);
         parseOptionalTimeUnit(nodeElement, Configuration.RLConfig.TTL_UNIT,Configuration.DEFAULT_TIME_UNIT).ifPresent(conf::setTtlUnit);
         parseOptionalTimeUnit(nodeElement, Configuration.RLConfig.PENALTY_TIME_UNIT,Configuration.DEFAULT_TIME_UNIT).ifPresent(conf::setPenaltyUnit);
+        parseOptionalAlgo(nodeElement,Configuration.RLConfig.ALGORITHM,Configuration.DEFAULT_ALGO).ifPresent(conf::setAlgoirthm);
 
         return conf;
+    }
+
+    private static Optional<Configuration.Algoirthm> parseOptionalAlgo(Element nodeElement, Configuration.RLConfig rlConfig, Configuration.Algoirthm defaultAlgo) {
+        String value = getTagValue(nodeElement, rlConfig.getConfig());
+
+        return (value != null && !value.isEmpty()) ? Optional.ofNullable(Configuration.Algoirthm.getAlgorithm(value)) : Optional.ofNullable(defaultAlgo);
     }
 
     private static String getTagValue(Element parent, String tag) {
@@ -135,6 +142,10 @@ public class ConfigurationUtil {
         }
         if (jsonObject.has(Configuration.RLConfig.PENALTY_TIME_UNIT.getConfig())) {
             conf.setPenaltyUnit(TimeUnit.valueOf(jsonObject.getString(Configuration.RLConfig.PENALTY_TIME_UNIT.getConfig().toUpperCase())));
+        }
+
+        if (jsonObject.has(Configuration.RLConfig.ALGORITHM.getConfig())){
+            conf.setAlgoirthm(Configuration.Algoirthm.getAlgorithm(jsonObject.getString(Configuration.RLConfig.ALGORITHM.getConfig())));
         }
 
         return conf;

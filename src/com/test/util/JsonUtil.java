@@ -109,6 +109,7 @@ public class JsonUtil {
         confAsMap.put(Configuration.RLConfig.WINDOW_UNIT.getConfig(), configuration.getWindowUnit());
         confAsMap.put(Configuration.RLConfig.TTL_UNIT.getConfig(), configuration.getTtlUnit());
         confAsMap.put(Configuration.RLConfig.PENALTY_TIME_UNIT.getConfig(), configuration.getPenaltyUnit());
+        confAsMap.put(Configuration.RLConfig.ALGORITHM.getConfig(), configuration.getAlgoirthm().getAlgorithm());
         return convertMapToJSON(confAsMap);
 
     }
