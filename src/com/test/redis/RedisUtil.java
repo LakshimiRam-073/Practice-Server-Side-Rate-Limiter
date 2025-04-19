@@ -11,6 +11,7 @@ import redis.clients.jedis.resps.ScanResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.test.ratelimit.configuration.ConfigurationUtil.buildConfigurationFromJson;
@@ -18,7 +19,7 @@ import static com.test.ratelimit.configuration.ConfigurationUtil.buildConfigurat
 public class RedisUtil {
 
 
-    private static final Integer DEFAULT_TTL_SECONDS= 10;
+    private static final Integer DEFAULT_TTL_SECONDS= 90;
 
     public static void setValue(String key, String value) {
         setValue(key,value,DEFAULT_TTL_SECONDS);
@@ -29,6 +30,28 @@ public class RedisUtil {
             if (ttlSeconds > 0) {
                 jedis.expire(key, ttlSeconds);
             }
+        }
+    }
+
+    public static void putSet(Map<String,Object> map,String key) throws Exception{
+        putSet(map,key,DEFAULT_TTL_SECONDS);
+    }
+    public static void putSet(Map<String,Object> map,String key,Integer ttl) throws Exception{
+
+        try(Jedis jedis = RedisConnection.getInstance().getJedis()) {
+            for (String field : map.keySet()){
+                String value = String.valueOf(map.get(field));
+                jedis.hset(key,field,value);
+            }
+                jedis.expire(key,ttl);
+
+        }
+
+    }
+
+    public static String getSetValue(String key, String field) throws  Exception{
+        try(Jedis jedis= RedisConnection.getInstance().getJedis()){
+            return jedis.hget(key,field);
         }
     }
 

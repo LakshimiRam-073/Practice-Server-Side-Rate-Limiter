@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ratelimiter>
+    <rateLimitConfig>
+        <limit>10</limit>
+        <interval>60</interval>
+        <uri>/api/v1/send-message</uri>
+        <burst>5</burst>
+        <TTL>70</TTL>
+	<penaltytime>30</penaltytime>
+	<algorithm>leaky_bucket</algorithm>
+    </rateLimitConfig>
+
+    <rateLimitConfig>
+        <limit>100</limit>
+        <interval>10</interval>
+        <intervalunit>minutes</intervalunit>
+        <uri>/api/v1/login</uri>
+        <burst>10</burst>
+        <TTL>600</TTL>
+        <TTLunit>seconds</TTLunit>
+        <penaltytime>5</penaltytime>
+	<penaltyunit>minutes</penaltyunit>
+	<algorithm>token_bucket</algorithm>
+    </rateLimitConfig>
+
+    <rateLimitConfig>
+        <limit>5</limit>
+        <interval>30</interval>
+        <uri>/api/v1/password-reset</uri>
+        <burst>2</burst>
+        <TTL>40</TTL>
+	<penaltytime>60</penaltytime>
+
+	<algorithm>fixed_window</algorithm>
+    </rateLimitConfig>
+</ratelimiter>
+

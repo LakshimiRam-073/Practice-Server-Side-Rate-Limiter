@@ -1,21 +1,48 @@
 import com.test.ratelimit.configuration.ConfigXMLParser;
 import com.test.ratelimit.configuration.Configuration;
+import com.test.ratelimit.limiters.RateLimiter;
+import com.test.ratelimit.limiters.RateLimiterFactory;
 import com.test.redis.RedisUtil;
 import com.test.server.TestHttpServer;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
 
         testServer();
+        Thread.sleep(TimeUnit.SECONDS.toMillis(5));
 //        testRedis();
 //        testParseConfiguration();
+        testLeakyBucket();
 
 
+    }
+
+    private static void testLeakyBucket() throws Exception {
+        RateLimiter rateLimiter = RateLimiterFactory.getRateLimiter("/api/v1/send-message");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
+        rateLimiter.allowRequest("localhost");
     }
 
     private static void testRedis() {

@@ -98,7 +98,7 @@ public class JsonUtil {
     public static JSONObject configurationAsJson(Configuration configuration) throws Exception{
 
         Map<String,Object> confAsMap = new HashMap<>();
-        confAsMap.put(Configuration.RLConfig.URI.getConfig(),configuration.getLimit());
+        confAsMap.put(Configuration.RLConfig.URI.getConfig(),configuration.getUri());
         confAsMap.put(Configuration.RLConfig.LIMIT.getConfig(),configuration.getLimit());
         confAsMap.put(Configuration.RLConfig.WINDOW.getConfig(), configuration.getWindow());
         confAsMap.put(Configuration.RLConfig.BURST.getConfig(), configuration.getBurst());

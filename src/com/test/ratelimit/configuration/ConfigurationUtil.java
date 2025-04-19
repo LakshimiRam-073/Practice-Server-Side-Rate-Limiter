@@ -132,21 +132,25 @@ public class ConfigurationUtil {
             conf.setPenalty(jsonObject.getInt(Configuration.RLConfig.PENALTY_TIME.getConfig()));
         }
         if (jsonObject.has(Configuration.RLConfig.LIMIT_UNIT.getConfig())) {
-            conf.setLimitUnit(TimeUnit.valueOf(jsonObject.getString(Configuration.RLConfig.LIMIT_UNIT.getConfig().toUpperCase())));
+            conf.setLimitUnit(TimeUnit.valueOf(jsonObject.getString(Configuration.RLConfig.LIMIT_UNIT.getConfig()).toUpperCase()));
         }
         if (jsonObject.has(Configuration.RLConfig.WINDOW_UNIT.getConfig())) {
-            conf.setWindowUnit(TimeUnit.valueOf(jsonObject.getString(Configuration.RLConfig.WINDOW_UNIT.getConfig().toUpperCase())));
+            conf.setWindowUnit(TimeUnit.valueOf(jsonObject.getString(Configuration.RLConfig.WINDOW_UNIT.getConfig()).toUpperCase()));
         }
         if (jsonObject.has(Configuration.RLConfig.TTL_UNIT.getConfig()) ){
-            conf.setTtlUnit(TimeUnit.valueOf(jsonObject.getString(Configuration.RLConfig.TTL_UNIT.getConfig().toUpperCase())));
+            conf.setTtlUnit(TimeUnit.valueOf(jsonObject.getString(Configuration.RLConfig.TTL_UNIT.getConfig()).toUpperCase()));
         }
         if (jsonObject.has(Configuration.RLConfig.PENALTY_TIME_UNIT.getConfig())) {
-            conf.setPenaltyUnit(TimeUnit.valueOf(jsonObject.getString(Configuration.RLConfig.PENALTY_TIME_UNIT.getConfig().toUpperCase())));
+            conf.setPenaltyUnit(TimeUnit.valueOf(jsonObject.getString(Configuration.RLConfig.PENALTY_TIME_UNIT.getConfig()).toUpperCase()));
         }
 
         if (jsonObject.has(Configuration.RLConfig.ALGORITHM.getConfig())){
             conf.setAlgoirthm(Configuration.Algoirthm.getAlgorithm(jsonObject.getString(Configuration.RLConfig.ALGORITHM.getConfig())));
         }
+
+
+        //Need to change every timeunit to seconds for easier purpose , can change to milli seconds for larger tech companies :)
+
 
         return conf;
     }

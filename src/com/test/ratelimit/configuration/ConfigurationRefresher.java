@@ -45,8 +45,7 @@ public class ConfigurationRefresher{
                 if (!configurationList.isEmpty()){
                     Configuration confTest = configurationList.get(0);
                     String keyTest = REDIS_PREFIX_STRING + confTest.getUri();
-                    String confValue = RedisUtil.getValue(keyTest);
-                    if (Objects.isNull(confValue) || "".equals(confValue)){
+                    if (!RedisUtil.exists(keyTest)){
                         throw new Exception("Refreshing is not happened properly");
                     }
                     System.out.println("Configurations added properly");

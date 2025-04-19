@@ -17,7 +17,7 @@ public interface RateLimiter {
 
         Adding up 5 classes with one Factory class. so totally 6
      */
-    boolean allowRequest(String uri, String ip) throws Exception; //with ip or user
+    boolean allowRequest(String ip) throws Exception; //with ip or user
 //    boolean allowRequest(String uri) throws Exception; //with ip or user
 
 }
