@@ -18,6 +18,11 @@ public class RateLimiterFactory {
 
             case LEAKY_BUCKET:
                 return new LeakyBucket(configuration);
+
+            case TOKEN_BUCKET:
+                return new TockenBucket(configuration);
+
+
         }
         return null;
 

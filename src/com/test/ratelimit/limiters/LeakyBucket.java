@@ -67,7 +67,7 @@ class LeakyBucket extends AbstractRateLimiter implements RateLimiter{
             configuration.setBurst(DEFAULT_BURST_LEVEL);
         }
         fieldmap.put(REDIS_LEAKY_BUCKET_LEVEL, level+1);
-        RedisUtil.putSet(fieldmap,key);
+        RedisUtil.putSet(fieldmap,key,Objects.isNull(configuration.getTtl()) ? RedisUtil.DEFAULT_TTL_SECONDS : configuration.getTtl());
         System.out.println("Allowed access to user "+ ip + " with Remaining request of "+(configuration.getLimit() -(level+1)));
 
 

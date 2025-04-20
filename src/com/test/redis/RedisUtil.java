@@ -19,7 +19,7 @@ import static com.test.ratelimit.configuration.ConfigurationUtil.buildConfigurat
 public class RedisUtil {
 
 
-    private static final Integer DEFAULT_TTL_SECONDS= 90;
+    public  static final Integer DEFAULT_TTL_SECONDS= 90;
 
     public static void setValue(String key, String value) {
         setValue(key,value,DEFAULT_TTL_SECONDS);

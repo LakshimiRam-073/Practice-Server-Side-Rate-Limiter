@@ -150,6 +150,10 @@ public class ConfigurationUtil {
 
 
         //Need to change every timeunit to seconds for easier purpose , can change to milli seconds for larger tech companies :)
+        conf.setLimit((int) conf.getLimitUnit().toSeconds(conf.getLimit()));
+        conf.setWindow((int) conf.getWindowUnit().toSeconds(conf.getWindow()));
+        conf.setTtl((int) conf.getTtlUnit().toSeconds(conf.getTtl()));
+        conf.setPenalty((int) conf.getPenaltyUnit().toSeconds(conf.getTtl()));
 
 
         return conf;

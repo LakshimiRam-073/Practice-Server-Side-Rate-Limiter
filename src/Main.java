@@ -24,7 +24,7 @@ public class Main {
     }
 
     private static void testLeakyBucket() throws Exception {
-        RateLimiter rateLimiter = RateLimiterFactory.getRateLimiter("/api/v1/send-message");
+        RateLimiter rateLimiter = RateLimiterFactory.getRateLimiter("/api/v1/login");
         rateLimiter.allowRequest("localhost");
         rateLimiter.allowRequest("localhost");
         rateLimiter.allowRequest("localhost");
