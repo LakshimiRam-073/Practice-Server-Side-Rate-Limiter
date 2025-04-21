@@ -20,11 +20,9 @@ public class TockenBucket extends AbstractRateLimiter implements RateLimiter{
 
         String key = REDIS_TOKEN_BUCKET_KEY+ip;
         String penalityKey = REDIS_PENALITY_KEY+ip;
-        if (RedisUtil.exists(penalityKey)){
-            System.out.println("Already in penality list for user "+ip);
-            return  false;
+        if (hasPenality(ip)){
+            return false;
         }
-
         String lastUpdateTImeString = RedisUtil.getSetValue(key,LAST_UPDATED_TIME);
         String bucketTokenStr = RedisUtil.getSetValue(key,REDIS_TOKEN_BUCKET_LIMIT);
         Long now = System.currentTimeMillis()/1000;
@@ -50,9 +48,7 @@ public class TockenBucket extends AbstractRateLimiter implements RateLimiter{
             tokens = configuration.getBurst() + configuration.getLimit();
         }
         if (tokens < 1){
-            String message = "Penalized for using URI:"+configuration.getUri()+" for more than "+configuration.getLimit();
-            RedisUtil.setValue(penalityKey,message,configuration.getPenalty());
-            System.out.println(message);
+            markForPenality(ip);
             return false;
         }
 

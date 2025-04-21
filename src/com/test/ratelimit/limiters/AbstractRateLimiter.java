@@ -20,6 +20,24 @@ public abstract class AbstractRateLimiter implements RateLimiter {
         String keyTest = REDIS_PREFIX_STRING + uri;
         return RedisUtil.exists(keyTest);
     }
+    public  boolean hasPenality(String ip){
+        String penalityKey = REDIS_PENALITY_KEY+ip;
+        if (RedisUtil.exists(penalityKey)){
+            System.out.println("Already in penality list for user "+ip);
+            return  true;
+
+        }
+        return false;
+
+    }
+
+    void markForPenality(String ip) {
+        String penalityKey = REDIS_PENALITY_KEY+ip;
+        String message = "Penalized for using URI:"+configuration.getUri()+" for more than "+configuration.getLimit();
+        RedisUtil.setValue(penalityKey,message,configuration.getPenalty());
+        System.out.println(message);
+
+    }
 
     @Override
     public abstract boolean allowRequest(String ip) throws Exception ;

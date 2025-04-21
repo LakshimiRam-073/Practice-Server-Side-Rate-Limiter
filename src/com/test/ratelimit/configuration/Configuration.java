@@ -11,7 +11,7 @@ public class Configuration {
     public static final Integer DEFAULT_BURST = -1;
     public static final Algoirthm DEFAULT_ALGO = Algoirthm.LEAKY_BUCKET;
     public enum Algoirthm {
-        LEAKY_BUCKET("leaky_bucket"),TOKEN_BUCKET("token_bucket"),FIXED_WINDOW("fixed_window"),SLIDING_WINDOW("sliding_window"),MOVING_WINDOW_EXPIRATION("moving_window_expiration");
+        LEAKY_BUCKET("leaky_bucket"),TOKEN_BUCKET("token_bucket"),FIXED_WINDOW("fixed_window"),MOVING_WINDOW_EXPIRATION("moving_window_expiration");
 
 
         private final String algorithm;

@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 import redis.clients.jedis.params.ScanParams;
 import redis.clients.jedis.resps.ScanResult;
 
@@ -78,6 +79,13 @@ public class RedisUtil {
             return jedis.exists(key);
         }
     }
+    public static void expire(String key, int ttlSeconds) {
+        try (Jedis jedis = RedisConnection.getInstance().getJedis()) {
+            jedis.expire(key, ttlSeconds);
+        }
+    }
+
+
 
     public static JSONArray getJson(String prefix) throws Exception{
         String cursor = ScanParams.SCAN_POINTER_START;

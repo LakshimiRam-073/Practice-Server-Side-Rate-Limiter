@@ -22,9 +22,16 @@ public class RateLimiterFactory {
             case TOKEN_BUCKET:
                 return new TockenBucket(configuration);
 
+            case FIXED_WINDOW:
+                return new FixedWindow(configuration);
 
+            case MOVING_WINDOW_EXPIRATION:
+                return new MovingWindowExpiration(configuration);
+
+            default:
+                System.out.println("Not implemented ");
+                return null;
         }
-        return null;
 
     }
 }

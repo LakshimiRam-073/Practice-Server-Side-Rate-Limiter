@@ -8,6 +8,8 @@ import java.net.InetSocketAddress;
 import java.util.*;
 
 import com.test.ratelimit.configuration.ConfigurationRefresher;
+import com.test.ratelimit.limiters.RateLimiter;
+import com.test.ratelimit.limiters.RateLimiterFactory;
 import com.test.redis.RedisConnection;
 import org.json.JSONObject;
 
@@ -40,7 +42,23 @@ public class TestHttpServer {
             JSONObject data = convertMapToJSON(uriVsData.get(uri));
 
             testServer.createContext(uri,(HttpExchange exchange) ->{
-                    String response = data.toString();
+
+                String clientIP = exchange.getRemoteAddress().getAddress().getHostAddress();
+                try {
+                    RateLimiter rateLimiter = RateLimiterFactory.getRateLimiter(uri);
+                    if (!rateLimiter.allowRequest(clientIP)){
+
+                        String rateLimitExceeded = "Rate limit exceeded for " + clientIP;
+                        exchange.sendResponseHeaders(429, rateLimitExceeded.getBytes().length);
+                        try (OutputStream os = exchange.getResponseBody()) {
+                            os.write(rateLimitExceeded.getBytes());
+                        }
+                        return;
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                String response = data.toString();
                     exchange.getResponseHeaders().set(CONTENT_TYPE,JSON_FORMAT);
                     exchange.sendResponseHeaders(SUCCESS_CODE,response.getBytes().length);
                     try(OutputStream os = exchange.getResponseBody()) {

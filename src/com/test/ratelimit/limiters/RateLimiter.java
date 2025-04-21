@@ -11,8 +11,7 @@ public interface RateLimiter {
         1. Leaky bucket
         2. Token bucket
         3. Fixed window
-        4. Sliding window
-        5. Moving window expiration
+        4. Moving window expiration
 
 
         Adding up 5 classes with one Factory class. so totally 6

@@ -3,6 +3,7 @@ import com.test.ratelimit.configuration.Configuration;
 import com.test.ratelimit.limiters.RateLimiter;
 import com.test.ratelimit.limiters.RateLimiterFactory;
 import com.test.redis.RedisUtil;
+import com.test.server.TestHttpClient;
 import com.test.server.TestHttpServer;
 
 import java.util.HashMap;
@@ -18,31 +19,20 @@ public class Main {
         Thread.sleep(TimeUnit.SECONDS.toMillis(5));
 //        testRedis();
 //        testParseConfiguration();
-        testLeakyBucket();
+//        testRateLimiter();
 
+        TestHttpClient.askServer("api/v1/password-reset");
 
     }
 
-    private static void testLeakyBucket() throws Exception {
-        RateLimiter rateLimiter = RateLimiterFactory.getRateLimiter("/api/v1/login");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
-        rateLimiter.allowRequest("localhost");
+    private static void testRateLimiter() throws Exception {
+        RateLimiter rateLimiter = RateLimiterFactory.getRateLimiter("/api/v1/password-reset");
+        int num=100;
+        for (int i = 0 ; i<num ; i++){
+            rateLimiter.allowRequest("localhost");
+            Thread.sleep(30);
+        }
+
     }
 
     private static void testRedis() {
@@ -70,7 +60,7 @@ public class Main {
         userInfo.put("email", "lakshimi@example.com");
         userInfo.put("role", "admin");
 
-        String uri = "/api/user/info";
+        String uri = "/api/v1/password-reset";
 
         Map<String,Map<String,Object >> data = new HashMap<>();
         data.put(uri,userInfo);

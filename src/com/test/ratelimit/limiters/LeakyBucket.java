@@ -23,9 +23,8 @@ class LeakyBucket extends AbstractRateLimiter implements RateLimiter{
     public boolean allowRequest( String ip) throws Exception {
         String key = REDIS_LEAKY_BUCKET_KEY + ip;
         String penalityKey = REDIS_PENALITY_KEY+ip;
-        if (RedisUtil.exists(penalityKey)){
-            System.out.println("Already in penality list for user "+ip);
-            return  false;
+        if (hasPenality(ip)){
+            return false;
         }
         String lastUpdatedTimeStr = RedisUtil.getSetValue(key,LAST_UPDATED_TIME);
         String levelStr = RedisUtil.getSetValue(key,REDIS_LEAKY_BUCKET_LEVEL);
@@ -55,9 +54,7 @@ class LeakyBucket extends AbstractRateLimiter implements RateLimiter{
         }
 
         if (level + 1 > configuration.getLimit()){
-            String message = "Penalized for using URI:"+configuration.getUri()+" for more than "+configuration.getLimit();
-            RedisUtil.setValue(penalityKey,message,configuration.getPenalty());
-            System.out.println(message);
+            markForPenality(ip);
             return false;
         }
 
